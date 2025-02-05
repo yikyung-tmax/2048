@@ -1,6 +1,7 @@
 {
   "name": "toy-2048",
   "private": true,
+  "homepage": "https://cornchip1.github.io/toy-2048/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -8,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
@@ -27,6 +28,5 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "vite": "^6.0.5"
-  },
-  "homepage": "https://cornchip1.github.io/toy-2048/"
+  }
 }
