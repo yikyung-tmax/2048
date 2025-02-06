@@ -58,6 +58,41 @@
   font-size: 25px;
   margin-bottom: 25px;
 }
+.gameIntro{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-between;
+}
+.intro{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.intro h2 {
+  display: block;
+  margin : 0px;
+  color: #776E65;
+  font-size: 1.5rem;
+}
+.intro p {
+  display: block;
+  color: #776E65;
+}
+.intro strong {
+  font-weight: bolder;
+}
+.restartButton{
+  margin: 10px;
+  display: inline-block;
+  background-color: #8F7A66;
+  border-radius: 3px;
+  color: #F9F6F2;
+  font-size: 18px;
+  width: 132px;
+  height: 40px;
+  text-align: center;
+  border: none;
+}
 .game{
   position: relative;
   width: 500px;

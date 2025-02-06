@@ -295,6 +295,18 @@ function App() {
           </div>
         </div>
       </div>
+      <div className='gameIntro'>
+        <div className='intro'>
+          <h2 className='intro'>
+            Play 2048 Game Online
+          </h2>
+          <p className='intro'>Join the numbers and get to the 
+            <strong> 2018 tile!</strong>
+          </p>
+        </div>
+        
+        <button className='restartButton'>New Game</button>
+      </div>
       <div className='game'>
         {
           isGameOver && (
