@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css'
 
 function App() {
 
   // 클래스를 만들고 싶은데 클래스로 만들면 오류가 남 ... (나중에 다 하면 리팩토링)
   // TODO 1 이동이 불가능할 때 아무일도 벌어지면 안됨 [V]
-  // TODO 2 키보드 아무거나 눌러도 인식이 됨 -> 왜..? [strict mode 끄니까 갑자기 해결됨... 이건 또 왜?]
-  // TODO 3 gameover, reset, score 집계
-  // TODO 4 움직이는 이펙트 추가
+  // TODO 2 키보드 아무거나 눌러도 인식이 됨 -> 왜..? [V, strict mode 끄니까 갑자기 해결됨... 이건 또 왜?]
+  // TODO 3 refresh 버튼, 기능 추가
+  // TODO 4 gameover, score 집계
+  // TODO 5 움직이는 이펙트 추가
 
   const SIZE = 4;
   const INITIAL_TILES = 2;
@@ -32,7 +32,6 @@ function App() {
   function chooseRandomCell(max){
     return Math.floor(Math.random() * max);
   }
-
 
   function addRandomCell(grid){
     const emptyCells = findRandomCells(grid);
@@ -131,6 +130,7 @@ function App() {
     }
     return grid;
   }
+
   function shiftDown(grid){
     for(let col = 0; col < SIZE; col++){
       let cnt = SIZE-1;
@@ -183,7 +183,7 @@ function App() {
     return original;
   }
 
-  function direction(e){
+  function handleKeyDown(e){
     let originalGrid = getOriginal(GRID);
     let nextGrid = [...GRID];
     if (e.key == 'ArrowUp') nextGrid = moveUp(nextGrid);
@@ -195,9 +195,47 @@ function App() {
   }
 
   useEffect(() => {
-    window.addEventListener("keydown", direction);
-    return () => window.removeEventListener("keydown", direction);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [GRID])
+
+
+    // // mobile swipe
+    // let startX = 0, startY = 0, endX = 0, endY = 0;
+
+    // function handleStart(e) {
+    //   startX = e.touches[0].clientX;
+    //   startY = e.touches[0].clientY;
+    // }
+
+    // function handleMove(e) {
+    //   endX = e.touches[0].clientX;
+    //   endY = e.touches[0].clientY;
+    // }
+
+    // function handleEnd(){
+    //   let originalGrid = getOriginal(GRID);
+    //   let nextGrid = [...GRID];
+    //   if (startX < endX) nextGrid = moveUp(nextGrid);
+    //   else if (startX > endX) nextGrid = moveDown(nextGrid);
+    //   else if (startY < endY) nextGrid = moveRight(nextGrid);
+    //   else if (startX > endY) nextGrid = moveLeft(nextGrid);
+    //   if (JSON.stringify(originalGrid) !== JSON.stringify(nextGrid)) nextGrid = addRandomCell(nextGrid);
+    //   setGrid(nextGrid);
+    // }
+
+    // useEffect(() => {
+    //   window.addEventListener('touchstart', handleStart);
+    //   window.addEventListener('touchmove', handleMove);
+    //   window.addEventListener('touchend', handleEnd);
+
+    //   return () => {
+    //     window.removeEventListener('touchstart', handleStart);
+    //     window.removeEventListener('touchmove', handleMove);
+    //     window.removeEventListener('touchend', handleEnd);
+  
+    //   }
+    // }, []);
 
   function getCellColor(value) {
     switch (value) {
@@ -216,6 +254,7 @@ function App() {
 
     }
   }
+
   return (
     <>
       <div>Score : {score}</div>
