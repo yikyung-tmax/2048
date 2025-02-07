@@ -13,30 +13,30 @@
   justify-content: space-evenly;
   display: flex;
 }
+/* emotion 으로 동적 크기 조절*/
 .score {
   background-color: #BBADA0;
   margin: 2px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* display: flex; */
+  /* flex-direction: column; */
+  align-items: start; 
   justify-content: center;
   text-align: center;
   color: white;
   border-radius: 3px;
   padding: 15px 25px;
   max-height: 28px;
-  width: 65px;
-  /* width: 28px;
-  max-width: 65px; */
+  /* width: 65px; */
+  /* width: 28px; */
+  /* max-width: 65px; */
   font-weight: bold;
-  overflow : hidden;
-  
+  /* overflow : hidden; */
 }
 .best{
   background-color: #BBADA0;
   margin: 2px;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -49,11 +49,12 @@
   width: 65px;
 }
 .score p, .best p {
+  line-height: 5px;
   display: flex;
   justify-content: center;
   font-size: 0.8rem;
-  margin-top: 25px;
-  margin-bottom: 0px;
+  margin-top: 0;
+  margin-bottom: 4px;
   color : #ffffff90;
   font-weight: bold;
 }

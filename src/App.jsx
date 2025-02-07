@@ -3,16 +3,18 @@ import './App.css'
 
 function App() {
 
-  // TODO 1 refresh 버튼, 기능 추가
-  // TODO 2 gameover, score 집계
+  // TODO 1 refresh 버튼, 기능 추가 [v]
+  // TODO 2 gameover, score 집계 [v]
   // TODO 3 움직이는 이펙트 추가
+  // TODO 4 function -> arrow function
+  // 디버깅 -> 콘솔 로그, 상태관리 라이브러리 
 
   const SIZE = 4;
   const INITIAL_TILES = 2;
-  const [SCORE, setScore] = useState(0);
-  const [BEST_SCORE, setBestScore] = useState(SCORE);
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(score);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [GRID, setGrid] = useState(initialize());
+  const [grid, setGrid] = useState(initialize());
 
 
   function initialize() {
@@ -194,9 +196,9 @@ function App() {
   function handleKeyDown(e) {
     if (isGameOver) return;
 
-    let originalGrid = getOriginal(GRID);
-    let nextGrid = [...GRID];
-    let nextScore = SCORE;
+    let originalGrid = getOriginal(grid);
+    let nextGrid = [...grid];
+    let nextScore = score;
     if (e.key == 'ArrowUp') [nextGrid, nextScore] = moveUp(nextGrid, nextScore);
     else if (e.key == 'ArrowDown') [nextGrid, nextScore] = moveDown(nextGrid, nextScore);
     else if (e.key == 'ArrowLeft') [nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
@@ -209,7 +211,7 @@ function App() {
     else if (checkGameOver(nextGrid)) {
       setGrid(nextGrid);
       setIsGameOver(true);
-      if (BEST_SCORE < nextScore) setBestScore(nextScore);
+      if (bestScore < nextScore) setBestScore(nextScore);
     }
   }
 
@@ -222,45 +224,67 @@ function App() {
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [GRID])
+  }, [grid])
 
+  // mobile swipe
+  let startX = 0, startY = 0, endX = 0, endY = 0;
 
-  // // mobile swipe
-  // let startX = 0, startY = 0, endX = 0, endY = 0;
+  function handleStart(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }
 
-  // function handleStart(e) {
-  //   startX = e.touches[0].clientX;
-  //   startY = e.touches[0].clientY;
-  // }
+  function handleMove(e) {
+    endX = e.touches[0].clientX;
+    endY = e.touches[0].clientY;
+  }
 
-  // function handleMove(e) {
-  //   endX = e.touches[0].clientX;
-  //   endY = e.touches[0].clientY;
-  // }
+  function handleEnd(){
+    if (isGameOver) return;
 
-  // function handleEnd(){
-  //   let originalGrid = getOriginal(GRID);
-  //   let nextGrid = [...GRID];
-  //   if (startX < endX) nextGrid = moveUp(nextGrid);
-  //   else if (startX > endX) nextGrid = moveDown(nextGrid);
-  //   else if (startY < endY) nextGrid = moveRight(nextGrid);
-  //   else if (startX > endY) nextGrid = moveLeft(nextGrid);
-  //   if (JSON.stringify(originalGrid) !== JSON.stringify(nextGrid)) nextGrid = addRandomCell(nextGrid);
-  //   setGrid(nextGrid);
-  // }
+    let originalGrid = getOriginal(grid);
+    let nextGrid = [...grid];
+    let nextScore = score;
 
-  // useEffect(() => {
-  //   window.addEventListener('touchstart', handleStart);
-  //   window.addEventListener('touchmove', handleMove);
-  //   window.addEventListener('touchend', handleEnd);
+    const diffX = endX - startX;
+    const diffY = endY - startY;
 
-  //   return () => {
-  //     window.removeEventListener('touchstart', handleStart);
-  //     window.removeEventListener('touchmove', handleMove);
-  //     window.removeEventListener('touchend', handleEnd);
+    // sideways
+    if (Math.abs(diffX) > Math.abs(diffY)){
+      if (diffX > 0) [nextGrid, nextScore] = moveRight(nextGrid, nextScore);
+      else [nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
+    }
+    else {
+      if (diffY > 0) [nextGrid, nextScore] = moveDown(nextGrid, nextScore);
+      else [nextGrid, nextScore] = moveUp(nextGrid, nextScore);
+    }
 
-  //   }
-  // }, []);
+    setScore(nextScore);
+    console.log("score : " + score + ", nextScore : " + nextScore);
+
+    if (JSON.stringify(originalGrid) !== JSON.stringify(nextGrid)) {
+      nextGrid = addRandomCell(nextGrid);
+      setGrid(nextGrid);
+    }
+    else if (checkGameOver(nextGrid)) {
+      setGrid(nextGrid);
+      setIsGameOver(true);
+      if (bestScore < nextScore) setBestScore(nextScore);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('touchstart', handleStart);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('touchend', handleEnd);
+
+    return () => {
+      window.removeEventListener('touchstart', handleStart);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleEnd);
+
+    }
+  }, [grid]);
 
   function getCellColor(value) {
     switch (value) {
@@ -285,13 +309,14 @@ function App() {
       <div className='info'>
         <h1 className='title'>2048</h1>
         <div className='scores'>
+          {/* score 길이에 따라 다른 css 적용하거나 emotion 써보기 */}
           <div className='score'>
             <p>SCORE</p>
-            <span>{SCORE}</span>
+            <span>{score}</span>
           </div>
           <div className='best'>
             <p>BEST</p>
-            <span>{BEST_SCORE}</span>
+            <span>{bestScore}</span>
           </div>
         </div>
       </div>
@@ -305,7 +330,7 @@ function App() {
           </p>
         </div>
         
-        <button className='restartButton'>New Game</button>
+        <button className='restartButton' onClick={reset}>New Game</button>
       </div>
       <div className='game'>
         {
@@ -319,7 +344,7 @@ function App() {
         <div className='grid'>
 
           {
-            GRID.map((row, rowIdx) => (
+            grid.map((row, rowIdx) => (
               <div key={rowIdx} className='row'>
                 {
                   row.map((value, colIdx) => {
