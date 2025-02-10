@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
 import './App.css'
+import { GameBoard } from './components/GameBoard'
+import { GameInfo } from './components/GameInfo'
+import { GameOver } from './components/GameOver'
 
 function App() {
 
-  // TODO 1 refresh 버튼, 기능 추가 [v]
-  // TODO 2 gameover, score 집계 [v]
-  // TODO 3 움직이는 이펙트 추가
-  // TODO 4 function -> arrow function
+  // 2/10 TODO
+  // [V] function -> arrow function 변환
+  // [ ] 코드 분리 (진행중)
+  // [ ] 움직이는 effect 추가
+  // [ ] 반응형 (emotion 사용)
   // 디버깅 -> 콘솔 로그, 상태관리 라이브러리 
+
+
+  // 초기화
 
   const SIZE = 4;
   const INITIAL_TILES = 2;
-  const [score, setScore] = useState(0);
-  const [bestScore, setBestScore] = useState(score);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [grid, setGrid] = useState(initialize());
 
-
-  function initialize() {
+  const initializeGrid = () => {
     let initialGrid = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
     for (let i = 0; i < INITIAL_TILES; i++) {
       initialGrid = addRandomCell(initialGrid);
@@ -25,7 +27,7 @@ function App() {
     return initialGrid;
   }
 
-  function findRandomCells(grid) {
+  const findRandomCells = (grid) => {
     const emptyCells = [];
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
@@ -35,11 +37,11 @@ function App() {
     return emptyCells;
   }
 
-  function chooseRandomCell(max) {
+  const chooseRandomCell = (max) => {
     return Math.floor(Math.random() * max);
   }
-
-  function addRandomCell(grid) {
+  
+  const addRandomCell = (grid) => {
     const emptyCells = findRandomCells(grid);
     if (emptyCells.length > 0) {
       const [row, col] = emptyCells[chooseRandomCell(emptyCells.length)];
@@ -48,18 +50,25 @@ function App() {
     return grid;
   }
 
+  // 게임 로직
+
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(score);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [grid, setGrid] = useState(initializeGrid());
+
   useEffect(() => {
-    let initialGrid = initialize();
+    let initialGrid = initializeGrid();
     setGrid(initialGrid);
   }, []);
 
-  function checkGameOver(grid) {
+  const checkGameOver = (grid) => {
     const emptyCells = findRandomCells(grid);
     if (emptyCells.length == 0) return true;
     return false;
   }
 
-  function moveUp(grid, score) {
+  const moveUp = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
     shiftUp(nextGrid);
@@ -75,8 +84,8 @@ function App() {
     shiftUp(nextGrid);
     return [nextGrid, nextScore];
   }
-
-  function moveDown(grid, score) {
+  
+  const moveDown = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
     shiftDown(nextGrid);
@@ -92,8 +101,8 @@ function App() {
     shiftDown(nextGrid);
     return [nextGrid, nextScore];
   }
-
-  function moveLeft(grid, score) {
+  
+  const moveLeft = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
     shiftLeft(nextGrid);
@@ -109,8 +118,8 @@ function App() {
     shiftLeft(nextGrid);
     return [nextGrid, nextScore];
   }
-
-  function moveRight(grid, score) {
+  
+  const moveRight = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
     shiftRight(nextGrid);
@@ -126,8 +135,8 @@ function App() {
     shiftRight(nextGrid);
     return [nextGrid, nextScore];
   }
-
-  function shiftUp(grid) {
+  
+  const shiftUp = (grid) => {
     for (let col = 0; col < SIZE; col++) {
       let cnt = 0;
       for (let row = 0; row < SIZE; row++) {
@@ -140,8 +149,8 @@ function App() {
     }
     return grid;
   }
-
-  function shiftDown(grid) {
+  
+  const shiftDown = (grid) => {
     for (let col = 0; col < SIZE; col++) {
       let cnt = SIZE - 1;
       for (let row = SIZE - 1; row >= 0; row--) {
@@ -154,8 +163,8 @@ function App() {
     }
     return grid;
   }
-
-  function shiftLeft(grid) {
+  
+  const shiftLeft = (grid) => {
     for (let row = 0; row < SIZE; row++) {
       let cnt = 0;
       for (let col = 0; col < SIZE; col++) {
@@ -168,8 +177,8 @@ function App() {
     }
     return grid;
   }
-
-  function shiftRight(grid) {
+  
+  const shiftRight = (grid) => {
     for (let row = 0; row < SIZE; row++) {
       let cnt = SIZE - 1;
       for (let col = SIZE - 1; col >= 0; col--) {
@@ -183,7 +192,7 @@ function App() {
     return grid;
   }
 
-  function getOriginal(grid) {
+  const getOriginal = (grid) => {
     let original = Array.from({ length: SIZE }, () => Array(SIZE));
     for (let r = 0; r < SIZE; r++) {
       for (let c = 0; c < SIZE; c++) {
@@ -193,7 +202,8 @@ function App() {
     return original;
   }
 
-  function handleKeyDown(e) {
+
+  const handleKeyDown = (e) => {
     if (isGameOver) return;
 
     let originalGrid = getOriginal(grid);
@@ -215,10 +225,10 @@ function App() {
     }
   }
 
-  function reset() {
+  const resetGame = () => {
     setIsGameOver(false);
     setScore(0);
-    setGrid(initialize());
+    setGrid(initializeGrid());
   }
 
   useEffect(() => {
@@ -229,17 +239,17 @@ function App() {
   // mobile swipe
   let startX = 0, startY = 0, endX = 0, endY = 0;
 
-  function handleStart(e) {
+  const handleStart = (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
   }
 
-  function handleMove(e) {
+  const handleMove = (e) => {
     endX = e.touches[0].clientX;
     endY = e.touches[0].clientY;
   }
 
-  function handleEnd(){
+  const handleEnd = () => {
     if (isGameOver) return;
 
     let originalGrid = getOriginal(grid);
@@ -250,13 +260,13 @@ function App() {
     const diffY = endY - startY;
 
     // sideways
-    if (Math.abs(diffX) > Math.abs(diffY)){
+    if (Math.abs(diffX) > Math.abs(diffY)) {
       if (diffX > 0) [nextGrid, nextScore] = moveRight(nextGrid, nextScore);
-      else [nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
+      else[nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
     }
     else {
       if (diffY > 0) [nextGrid, nextScore] = moveDown(nextGrid, nextScore);
-      else [nextGrid, nextScore] = moveUp(nextGrid, nextScore);
+      else[nextGrid, nextScore] = moveUp(nextGrid, nextScore);
     }
 
     setScore(nextScore);
@@ -286,81 +296,13 @@ function App() {
     }
   }, [grid]);
 
-  function getCellColor(value) {
-    switch (value) {
-      case 2: return { background: "#EEE4DA", font: "#776E65", size: "55px" };
-      case 4: return { background: "#EDE0C8", font: "#776E65", size: "55px" };
-      case 8: return { background: "#F2B179", font: "#F9F6F2", size: "55px" };
-      case 16: return { background: "#F59563", font: "#F9F6F2", size: "55px" };
-      case 32: return { background: "#F67C5F", font: "#F9F6F2", size: "55px" };
-      case 64: return { background: "#F65E3B", font: "#F9F6F2", size: "55px" };
-      case 128: return { background: "#EDCF72", font: "#F9F6F2", size: "45px" };
-      case 256: return { background: "#EDCC61", font: "#F9F6F2", size: "45px" };
-      case 512: return { background: "#EDC850", font: "#F9F6F2", size: "45px" };
-      case 1024: return { background: "#EDC53F", font: "#F9F6F2", size: "35px" };
-      case 2048: return { background: "#EDC22E", font: "#F9F6F2", size: "35px" };
-      default: return { background: "#EEE4DA59", font: "white", size: "55px" };
-
-    }
-  }
-
   return (
-    <>
-      <div className='info'>
-        <h1 className='title'>2048</h1>
-        <div className='scores'>
-          {/* score 길이에 따라 다른 css 적용하거나 emotion 써보기 */}
-          <div className='score'>
-            <p>SCORE</p>
-            <span>{score}</span>
-          </div>
-          <div className='best'>
-            <p>BEST</p>
-            <span>{bestScore}</span>
-          </div>
-        </div>
-      </div>
-      <div className='gameIntro'>
-        <div className='intro'>
-          <h2 className='intro'>
-            Play 2048 Game Online
-          </h2>
-          <p className='intro'>Join the numbers and get to the 
-            <strong> 2018 tile!</strong>
-          </p>
-        </div>
-        
-        <button className='restartButton' onClick={reset}>New Game</button>
-      </div>
-      <div className='game'>
-        {
-          isGameOver && (
-            <div className='gameOver'>
-              <p>Game Over! </p>
-              <buttion className='retryButton' onClick={reset}>Try again</buttion>
-            </div>
-          )
-        }
-        <div className='grid'>
+    <div>
+      <GameInfo score = {score} bestScore={bestScore} resetGame={resetGame}/>
+      <GameBoard grid = {grid}/>
+      <GameOver isGameOver={isGameOver} resetGame={resetGame}/>
+    </div>
 
-          {
-            grid.map((row, rowIdx) => (
-              <div key={rowIdx} className='row'>
-                {
-                  row.map((value, colIdx) => {
-                    const { background, font, size } = getCellColor(value);
-                    return value == 0
-                      ? <div key={`${rowIdx}-${colIdx}`} className='emptyCell'></div>
-                      : <div key={`${rowIdx}-${colIdx}`} className='filledCell' style={{ backgroundColor: background, color: font, fontSize: size }}>{value}</div>
-                  })
-                }
-              </div>
-            ))
-          }
-        </div>
-      </div>
-
-    </>
   )
 }
 
