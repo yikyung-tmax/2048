@@ -6,8 +6,7 @@ import { GameOver } from './components/GameOver'
 
 function App() {
 
-  // 2/10 TODO
-  // [V] function -> arrow function 변환
+  // 2/12 TODO
   // [ ] 코드 분리 (진행중)
   // [ ] 움직이는 effect 추가
   // [ ] 반응형 (emotion 사용)
@@ -71,6 +70,7 @@ function App() {
   const moveUp = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
+    let movedTiles = [];
     shiftUp(nextGrid);
     for (let col = 0; col < SIZE; col++) {
       for (let row = 0; row < SIZE - 1; row++) {
@@ -78,16 +78,18 @@ function App() {
           nextGrid[row][col] += nextGrid[row + 1][col];
           nextGrid[row + 1][col] = 0;
           nextScore += nextGrid[row][col];
+          movedTiles.push({before : [row+1, col] , after : [row, col]});
         }
       }
     }
     shiftUp(nextGrid);
-    return [nextGrid, nextScore];
+    return [nextGrid, nextScore, movedTiles];
   }
   
   const moveDown = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
+    let movedTiles = [];
     shiftDown(nextGrid);
     for (let col = 0; col < SIZE; col++) {
       for (let row = SIZE - 1; row > 0; row--) {
@@ -95,16 +97,18 @@ function App() {
           nextGrid[row][col] += nextGrid[row - 1][col];
           nextGrid[row - 1][col] = 0;
           nextScore += nextGrid[row][col];
+          movedTiles.push({before : [row-1, col] , after : [row, col]});
         }
       }
     }
     shiftDown(nextGrid);
-    return [nextGrid, nextScore];
+    return [nextGrid, nextScore, movedTiles];
   }
   
   const moveLeft = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
+    let movedTiles = [];
     shiftLeft(nextGrid);
     for (let row = 0; row < SIZE; row++) {
       for (let col = 0; col < SIZE - 1; col++) {
@@ -112,16 +116,18 @@ function App() {
           nextGrid[row][col] += nextGrid[row][col + 1];
           nextGrid[row][col + 1] = 0;
           nextScore += nextGrid[row][col];
+          movedTiles.push({before : [row, col+1] , after : [row, col]});
         }
       }
     }
     shiftLeft(nextGrid);
-    return [nextGrid, nextScore];
+    return [nextGrid, nextScore, movedTiles];
   }
   
   const moveRight = (grid, score) => {
     let nextGrid = [...grid];
     let nextScore = score;
+    let movedTiles = [];
     shiftRight(nextGrid);
     for (let row = 0; row < SIZE; row++) {
       for (let col = SIZE - 1; col > 0; col--) {
@@ -129,11 +135,12 @@ function App() {
           nextGrid[row][col] += nextGrid[row][col - 1];
           nextGrid[row][col - 1] = 0;
           nextScore += nextGrid[row][col];
+          movedTiles.push({before : [row, col-1] , after : [row, col]});
         }
       }
     }
     shiftRight(nextGrid);
-    return [nextGrid, nextScore];
+    return [nextGrid, nextScore, movedTiles];
   }
   
   const shiftUp = (grid) => {
@@ -202,17 +209,60 @@ function App() {
     return original;
   }
 
+  let startX = 0, startY = 0, endX = 0, endY = 0;
 
-  const handleKeyDown = (e) => {
-    if (isGameOver) return;
+  const move = (e, method) => {
 
     let originalGrid = getOriginal(grid);
     let nextGrid = [...grid];
     let nextScore = score;
-    if (e.key == 'ArrowUp') [nextGrid, nextScore] = moveUp(nextGrid, nextScore);
-    else if (e.key == 'ArrowDown') [nextGrid, nextScore] = moveDown(nextGrid, nextScore);
-    else if (e.key == 'ArrowLeft') [nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
-    else if (e.key == 'ArrowRight') [nextGrid, nextScore] = moveRight(nextGrid, nextScore);
+
+    if (method === 'keyboard'){
+      handleKeyDown(e, originalGrid, nextGrid, nextScore);
+    }
+    else if (method === 'swipe'){
+      
+
+      startX, startY = handleStart(e);
+      endX, endY = handleMove(e);
+      handleEnd(originalGrid, nextGrid, nextScore);
+    }
+
+  }
+
+  const handleEvent = (e) => {
+    if (isGameOver) return;
+
+    if (e.type === 'keydown'){
+      move(e, 'keyboard');
+    }
+    else if (e.type === 'touchstart' || e.type === 'touchmove' || e.type === 'touchend') {
+      move(e, 'swipe');
+    }
+  }
+
+  const [moved, setMoved] = useState([]);
+
+  let movedTiles = [];
+
+  const handleKeyDown = (e, originalGrid, nextGrid, nextScore) => {
+    if (e.key == 'ArrowUp') {
+      [nextGrid, nextScore, movedTiles] = moveUp(nextGrid, nextScore);
+      setMoved(movedTiles)
+    }
+    else if (e.key == 'ArrowDown') {
+      [nextGrid, nextScore, movedTiles] = moveDown(nextGrid, nextScore);
+      setMoved(movedTiles)
+    }
+    else if (e.key == 'ArrowLeft') {
+      [nextGrid, nextScore, movedTiles] = moveLeft(nextGrid, nextScore);
+      setMoved(movedTiles)
+    }
+    else if (e.key == 'ArrowRight') {
+      [nextGrid, nextScore, movedTiles]= moveRight(nextGrid, nextScore);
+      setMoved(movedTiles)
+      console.log(movedTiles);
+    }
     setScore(nextScore);
     if (JSON.stringify(originalGrid) !== JSON.stringify(nextGrid)) {
       nextGrid = addRandomCell(nextGrid);
@@ -225,48 +275,46 @@ function App() {
     }
   }
 
-  const resetGame = () => {
-    setIsGameOver(false);
-    setScore(0);
-    setGrid(initializeGrid());
-  }
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [grid])
-
-  // mobile swipe
-  let startX = 0, startY = 0, endX = 0, endY = 0;
+  console.log(movedTiles);
 
   const handleStart = (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
+
+    return [startX, startY];
   }
 
   const handleMove = (e) => {
     endX = e.touches[0].clientX;
     endY = e.touches[0].clientY;
+
+    return [endX, endY];
   }
 
-  const handleEnd = () => {
-    if (isGameOver) return;
-
-    let originalGrid = getOriginal(grid);
-    let nextGrid = [...grid];
-    let nextScore = score;
-
+  const handleEnd = (originalGrid, nextGrid, nextScore) => {
     const diffX = endX - startX;
     const diffY = endY - startY;
 
     // sideways
     if (Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 0) [nextGrid, nextScore] = moveRight(nextGrid, nextScore);
-      else[nextGrid, nextScore] = moveLeft(nextGrid, nextScore);
+      if (diffX > 0){
+        [nextGrid, nextScore, movedTiles]= moveRight(nextGrid, nextScore);
+        setMoved(movedTiles)
+      }
+      else {
+        [nextGrid, nextScore, movedTiles] = moveLeft(nextGrid, nextScore);
+        setMoved(movedTiles)
+      }
     }
     else {
-      if (diffY > 0) [nextGrid, nextScore] = moveDown(nextGrid, nextScore);
-      else[nextGrid, nextScore] = moveUp(nextGrid, nextScore);
+      if (diffY > 0){
+        [nextGrid, nextScore, movedTiles] = moveDown(nextGrid, nextScore);
+        setMoved(movedTiles)
+      }
+      else{
+        [nextGrid, nextScore, movedTiles] = moveUp(nextGrid, nextScore);
+        setMoved(movedTiles)
+      }
     }
 
     setScore(nextScore);
@@ -284,22 +332,33 @@ function App() {
   }
 
   useEffect(() => {
-    window.addEventListener('touchstart', handleStart);
-    window.addEventListener('touchmove', handleMove);
-    window.addEventListener('touchend', handleEnd);
+    window.addEventListener('keydown', (e) => handleEvent(e));
+    window.addEventListener('touchstart', handleEvent);
+    window.addEventListener('touchmove', handleEvent);
+    window.addEventListener('touchend', handleEvent);
 
     return () => {
-      window.removeEventListener('touchstart', handleStart);
-      window.removeEventListener('touchmove', handleMove);
-      window.removeEventListener('touchend', handleEnd);
+      window.removeEventListener('keydown', handleEvent);
+      window.removeEventListener('touchstart', handleEvent);
+      window.removeEventListener('touchmove', handleEvent);
+      window.removeEventListener('touchend', handleEvent);
 
     }
   }, [grid]);
 
+
+  console.log(moved);
+
+  const resetGame = () => {
+    setIsGameOver(false);
+    setScore(0);
+    setGrid(initializeGrid());
+  }
+
   return (
     <div>
       <GameInfo score = {score} bestScore={bestScore} resetGame={resetGame}/>
-      <GameBoard grid = {grid}/>
+      <GameBoard grid = {grid} movedTiles = {moved}/>
       <GameOver isGameOver={isGameOver} resetGame={resetGame}/>
     </div>
 
