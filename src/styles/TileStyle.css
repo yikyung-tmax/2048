@@ -1,0 +1,73 @@
+
+.tile2, .tile4, .tile8 {
+    color: #776E65;
+    font-size: 55px;
+}
+.tile16, .tile32, .tile64 {
+    color : #F9F6F2;
+    font-size : 55px;
+}
+.tile128, .tile256, .tile512 {
+    color : #F9F6F2;
+    font-size : 45px;
+}
+.tile1024, .tile2048 {
+    color : #F9F6F2;
+    font-size : 35px;
+}
+
+.tile2{
+    background-color: #EEE4DA;
+}
+.tile4{
+    background-color: #EDE0C8;
+}
+.tile8{
+    background-color: #F2B179;
+}
+.tile16{
+    background-color: #F59563;
+}
+.tile32{
+    background-color: #F67C5F;
+}
+.tile64{
+    background-color: #F65E3B;
+}
+.tile128{
+    background-color: #EDCF72;
+}
+.tile256{
+    background-color: #EDCC61;
+}
+.tile512{
+    background-color: #EDC850;
+}
+.tile1024{
+    background-color: #EDC53F;
+}
+.tile2048{
+    background-color: #EDC22E;
+}
+
+
+@media screen and (max-width : 520px){
+
+    .tile2, .tile4, .tile8 {
+        color: #776E65;
+        font-size: 35px;
+    }
+    .tile16, .tile32, .tile64 {
+        color : #F9F6F2;
+        font-size : 35px;
+    }
+    .tile128, .tile256, .tile512 {
+        color : #F9F6F2;
+        font-size : 25px;
+    }
+    .tile1024, .tile2048 {
+        color : #F9F6F2;
+        font-size : 15px;
+    }
+}
+
