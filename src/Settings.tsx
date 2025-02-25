@@ -22,6 +22,7 @@ export type GameInfo = {
     status : GameStatus;
     isChanged : boolean;
     score : number;
+    add : number;
     bestScore : number;
 }
 

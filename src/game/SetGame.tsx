@@ -8,13 +8,13 @@ export const createBoard = () => {
   return board;
 };
 
-export const apply = (infoParam: GameInfo): GameInfo => {
+export const apply = (infoParam : GameInfo): GameInfo => {
   const keys = [];
   for (let i = 0; i < Size; i++) {
     for (let j = 0; j < Size; j++) keys.push(infoParam.board[i][j]);
   }
 
-  const newTiles: Tiles = keys.reduce((result, tileId: number) => {
+  const newTiles : Tiles = keys.reduce((result, tileId: number) => {
     if (tileId == null) return result;
     return { ...result, [tileId]: infoParam.tiles[tileId] };
   }, {});
@@ -23,6 +23,14 @@ export const apply = (infoParam: GameInfo): GameInfo => {
     ...infoParam,
     tiles: newTiles,
   };
+};
+
+export const addScore = (infoParam : GameInfo) : GameInfo => {
+    const newScore = infoParam.score + infoParam.add;
+    return {
+      ...infoParam,
+      score : newScore
+    };
 };
 
 export const createTile = (tile: Tile, infoParam: GameInfo): GameInfo => {
@@ -49,6 +57,7 @@ export const initializeGame = () => {
     status: "START" as GameStatus,
     isChanged: false,
     score: 0,
+    add: 0,
     bestScore: 0,
   };
   return gameInfo;

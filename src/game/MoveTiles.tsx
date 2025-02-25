@@ -8,7 +8,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
         case 'UP' : {
             const newBoard = createBoard();
             const newTiles : Tiles = {};
-            let newScore = gameInfo.score;
+            let addScore = gameInfo.add;
             let flag = false;
 
             for(let j = 0; j < Size; j++){
@@ -24,7 +24,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
 
                     if (id != null){
                         if (previous != null && previous.id != null && previous.value == now.value){
-                            newScore += previous.value * 2;
+                            addScore += previous.value * 2;
                             newTiles[previous.id] = { ...previous, value : previous.value*2};
                             previous = null;
                             flag = true;
@@ -46,14 +46,14 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
                 ...gameInfo,
                 board: newBoard,
                 tiles: newTiles,
-                score: newScore,
+                add: addScore,
                 isChanged: flag,
               };
         }
         case 'DOWN' : {
             const newBoard = createBoard();
             const newTiles : Tiles = {};
-            let newScore = gameInfo.score;
+            let addScore = gameInfo.add;
             let flag = false;
 
             for(let j = 0; j < Size; j++){
@@ -69,7 +69,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
 
                     if (id != null){
                         if (previous != null && previous.id != null && previous.value == now.value){
-                            newScore += previous.value * 2;
+                            addScore += previous.value * 2;
                             newTiles[previous.id] = { ...previous, value : previous.value*2};
                             previous = null;
                             flag = true;
@@ -90,14 +90,14 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
                 ...gameInfo,
                 board: newBoard,
                 tiles: newTiles,
-                score: newScore,
+                add: addScore,
                 isChanged: flag,
               };
         }
         case 'LEFT' : {
             const newBoard = createBoard();
             const newTiles : Tiles = {};
-            let newScore = gameInfo.score;
+            let addScore = gameInfo.add;
             let flag = false;
 
             for(let i = 0; i < Size; i++){
@@ -113,7 +113,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
 
                     if (id != null){
                         if (previous != null && previous.id != null && previous.value == now.value){
-                            newScore += previous.value * 2;
+                            addScore += previous.value * 2;
                             newTiles[previous.id] = { ...previous, value : previous.value*2};
                             previous = null;
                             flag = true;
@@ -134,14 +134,14 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
                 ...gameInfo,
                 board: newBoard,
                 tiles: newTiles,
-                score: newScore,
+                add : addScore,
                 isChanged: flag,
               };
         }
         case 'RIGHT' : {
             const newBoard = createBoard();
             const newTiles : Tiles = {};
-            let newScore = gameInfo.score;
+            let addScore = gameInfo.add;
             let flag = false;
 
             for(let i = 0; i < Size; i++){
@@ -157,7 +157,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
 
                     if (id != null){
                         if (previous != null && previous.id != null && previous.value == now.value){
-                            newScore += previous.value * 2;
+                            addScore += previous.value * 2;
                             newTiles[previous.id] = { ...previous, value : previous.value*2};
                             previous = null;
                             flag = true;
@@ -179,7 +179,7 @@ export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => 
                 ...gameInfo,
                 board: newBoard,
                 tiles: newTiles,
-                score: newScore,
+                add: addScore,
                 isChanged: flag,
               };
         }

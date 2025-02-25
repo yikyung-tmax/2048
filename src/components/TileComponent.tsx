@@ -1,34 +1,3 @@
-// /** @jsxImportSource @emotion/react */
-
-// import '../styles/TileStyle.css'
-// import { css } from '@emotion/react'
-// import { Tile } from '../Settings'
-// import emotionReact_isolatedHnrs from '@emotion/react/_isolated-hnrs';
-
-// export default function TileComponent({ id, value, style }: Tile & { style?: React.CSSProperties }) 
-
-//     const top = style.position[0];
-//     const left = style.position[1];
-
-//     const tileAnimation = css`
-//     position: absolute;
-//     top: ${position[0] * 116.25}px; /* 106.25 + 10px 간격 */
-//     left: ${position[1] * 116.25}px;
-//     transition: top 0.2s ease-in-out, left 0.2s ease-in-out;
-//     `;
-    
-
-
-
-//     return (
-
-//         <div key={id} className={`tile tile${value}`} css = {style} ? {tileAnimation} : null style={style}>
-//             {value}
-//         </div>
-//     );
-// }
-
-
 /** @jsxImportSource @emotion/react */
 
 import '../styles/TileStyle.css'
@@ -37,7 +6,7 @@ import { Tile } from '../Settings'
 
 interface TileComponentProps extends Tile {
     style?: React.CSSProperties;
-    isWide: boolean; // isWide 타입 추가
+    isWide: boolean;
   }
 
 export default function TileComponent({ id, value, style, isWide }: TileComponentProps) {
@@ -57,7 +26,7 @@ export default function TileComponent({ id, value, style, isWide }: TileComponen
     `;
 
     const emotionStyle: CSSObject = {
-        ...style, // 스타일 객체를 spread로 확장
+        ...style,
     };
 
     
@@ -65,7 +34,7 @@ export default function TileComponent({ id, value, style, isWide }: TileComponen
         <div
             key={id}
             className={`tile tile${value}`}
-            css={[tileAnimation, emotionStyle]} // tileAnimation과 style을 결합
+            css={[tileAnimation, emotionStyle]}
         >
             {value}
         </div>

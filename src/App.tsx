@@ -1,9 +1,9 @@
-import Board from './components/BoardComponent'
+import GameComponent from "./components/GameContainerComponent";
 
 function App(){
 	return (
 		<div>
-			<Board />
+			<GameComponent/>
 		</div>
 	)
 }

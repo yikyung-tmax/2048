@@ -1,0 +1,30 @@
+.title {
+    font-size: 4rem;
+    color : #776E65;
+    margin: 0;
+}
+.gameIntro{
+    display: flex;
+    align-items:start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.intro{
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+.intro h2 {
+display: block;
+margin : 0px 0px 5px;
+color: #776E65;
+font-size: 1.2rem;
+}
+.intro p {
+display: block;
+margin: 0px 0px 10px;
+color: #776E65;;
+}
+.intro strong {
+font-weight: bolder;
+}

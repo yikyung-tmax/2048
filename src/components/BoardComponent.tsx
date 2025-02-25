@@ -12,10 +12,10 @@ const Board = () => {
     status: "START",
     isChanged: false,
     score: 0,
+    add : 0,
     bestScore: 0,
   });
 
-  // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key#examples
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       let direction: MoveDirection = null;
@@ -133,6 +133,7 @@ const Board = () => {
       const updatedGameInfo: GameInfo = checkStatus(gameInfo);
       if (updatedGameInfo.status === "GAME_OVER") {
         setGameInfo(updatedGameInfo);
+        // update bestScore
       }
     }
   }, [gameInfo]);
