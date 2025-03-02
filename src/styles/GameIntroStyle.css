@@ -1,30 +1,77 @@
+.gameIntro {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
 .title {
-    font-size: 4rem;
-    color : #776E65;
-    margin: 0;
+  font-size: 4rem;
+  color: #776e65;
+  margin: 0;
 }
-.gameIntro{
-    display: flex;
-    align-items:start;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
 }
-.intro{
-display: flex;
-flex-direction: column;
-justify-content: space-between;
+
+.intro {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
 }
 .intro h2 {
-display: block;
-margin : 0px 0px 5px;
-color: #776E65;
-font-size: 1.2rem;
+  display: block;
+  margin: 0px 0px 5px;
+  color: #776e65;
+  font-size: 1.2rem;
 }
 .intro p {
-display: block;
-margin: 0px 0px 10px;
-color: #776E65;;
+  display: block;
+  margin: 0px 0px 10px;
+  color: #776e65;
 }
 .intro strong {
-font-weight: bolder;
+  font-weight: bolder;
+}
+.scores-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 520px) {
+  .gameIntro {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 280px;
+  }
+
+  .title {
+    font-size: 48px;
+    color: #776e65;
+    margin: 0;
+  }
+
+  .intro h2 {
+    font-size: 1rem;
+  }
+  .intro p {
+    font-size: 15px;
+  }
 }

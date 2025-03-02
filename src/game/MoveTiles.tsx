@@ -3,7 +3,7 @@ import { createBoard } from './SetGame'
 
 
 export const processMove = (direction : MoveDirection, gameInfo : GameInfo ) => {
-    console.log("========== GAME INFO ========\n" + JSON.stringify(gameInfo));
+    // console.log("========== GAME INFO ========\n" + JSON.stringify(gameInfo));
     switch (direction){
         case 'UP' : {
             const newBoard = createBoard();

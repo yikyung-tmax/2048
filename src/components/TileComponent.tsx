@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import '../styles/TileStyle.css'
-import { css, CSSObject } from '@emotion/react'
+import { css, CSSObject, keyframes } from '@emotion/react'
 import { Tile } from '../Settings'
 
 interface TileComponentProps extends Tile {
@@ -17,12 +17,22 @@ export default function TileComponent({ id, value, style, isWide }: TileComponen
     const tileSize = isWide ? 107 : 58;
     const spacing = isWide ? 15 : 10;
 
-
+    const fadeIn = keyframes`
+        from {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    `;
     const tileAnimation = css`
         position: absolute;
         top: ${position[0] * (tileSize + spacing)}px;
         left: ${position[1] * (tileSize + spacing)}px;
         transition: top 0.15s ease-in-out, left 0.15s ease-in-out;
+        animation : ${fadeIn} 0.2s ease-out;
     `;
 
     const emotionStyle: CSSObject = {

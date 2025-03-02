@@ -41,7 +41,7 @@ export const createTile = (tile: Tile, infoParam: GameInfo): GameInfo => {
     rowIndex === i ? row.map((cell, colIndex) => (colIndex === j ? tileId : cell)) : row
   );
 
-  console.log(newBoard);
+  // console.log(newBoard);
   return {
     ...infoParam,
     board: newBoard,

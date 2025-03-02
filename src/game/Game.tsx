@@ -29,7 +29,7 @@ export const addRandomTile = (gameInfo: GameInfo): GameInfo => {
       position: emptyCells[cellIndex],
       value: Math.random() < 0.9 ? 2 : 4
     };
-    console.log("newTile : " + JSON.stringify(newTile));
+    // console.log("newTile : " + JSON.stringify(newTile));
     return createTile(newTile, gameInfo);
   }
   return gameInfo;
@@ -37,13 +37,13 @@ export const addRandomTile = (gameInfo: GameInfo): GameInfo => {
 
 export const move = (direction: MoveDirection, gameInfo: GameInfo): GameInfo => {
     const newGameInfo : GameInfo = processMove(direction, gameInfo);
-    console.log("check : " + JSON.stringify(newGameInfo));
+    // console.log("check : " + JSON.stringify(newGameInfo));
     return newGameInfo;
   }
 
 export const startGame = () : GameInfo => {
     let gameInfo : GameInfo = initializeGame();
-    console.log("game Info at start game : " + JSON.stringify(gameInfo));
+    // console.log("game Info at start game : " + JSON.stringify(gameInfo));
     for (let i = 0; i < InitialTiles; i++) gameInfo = addRandomTile(gameInfo);
     return gameInfo;
 };
@@ -53,7 +53,7 @@ export const checkStatus = (gameInfo: GameInfo) => {
 
   if (!board || !tiles) return gameInfo; 
 
-  console.log(board);
+  // console.log(board);
   for (let i = 0; i < Size - 1; i++) {
     for (let j = 0; j < Size - 1; j++) {
       if (board[i] === undefined || board[i][j] === null || board[i][j] === undefined ||

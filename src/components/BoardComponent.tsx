@@ -1,30 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GameInfo, MoveDirection, Tile, Size } from "../Settings";
-import { getTiles, startGame, checkStatus, move, addRandomTile } from "../game/Game";
+import {
+  getTiles,
+  startGame,
+  checkStatus,
+  move,
+  addRandomTile,
+} from "../game/Game";
 import { apply } from "../game/SetGame";
 import "../styles/BoardStyle.css";
 import TileComponent from "./TileComponent";
 
-const Board = () => {
-  const [gameInfo, setGameInfo] = useState<GameInfo>({
-    board: [],
-    tiles: {},
-    status: "START",
-    isChanged: false,
-    score: 0,
-    add : 0,
-    bestScore: 0,
-  });
+interface Props {
+  gameInfo: GameInfo;
+  setGameInfo: React.Dispatch<React.SetStateAction<GameInfo>>;
+}
 
+const Board = ({ gameInfo, setGameInfo }: Props) => {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       let direction: MoveDirection = null;
       e.preventDefault();
       switch (e.key) {
-        case "ArrowUp": direction = "UP"; break;
-        case "ArrowDown": direction = "DOWN"; break;
-        case "ArrowLeft": direction = "LEFT"; break;
-        case "ArrowRight": direction = "RIGHT"; break;
+        case "ArrowUp":
+          direction = "UP";
+          break;
+        case "ArrowDown":
+          direction = "DOWN";
+          break;
+        case "ArrowLeft":
+          direction = "LEFT";
+          break;
+        case "ArrowRight":
+          direction = "RIGHT";
+          break;
       }
       if (direction != null) {
         const newGameInfo = move(direction, gameInfo);
@@ -88,14 +97,15 @@ const Board = () => {
     return getTiles(gameInfo).map((tile: Tile) => {
       const tileSize = isWide ? 107 : 58;
       const spacing = isWide ? 15 : 10;
-
       const top = tile.position[0] * (tileSize + spacing);
       const left = tile.position[1] * (tileSize + spacing);
-
-      console.log(top + " " + left);
-
       return (
-        <TileComponent key={tile.id} {...tile} style={{ position: "absolute", top: `${top}px`, left: `${left}px` }} isWide = {isWide}/>
+        <TileComponent
+          key={tile.id}
+          {...tile}
+          style={{ position: "absolute", top: `${top}px`, left: `${left}px` }}
+          isWide={isWide}
+        />
       );
     });
   };
@@ -113,9 +123,7 @@ const Board = () => {
   }, [handleKeyDown, handleStart, handleEnd]);
 
   useEffect(() => {
-    console.log(gameInfo.status);
     if (gameInfo.status === "START") {
-      console.log("====== GAME START ======");
       const initialize: GameInfo = startGame();
       setGameInfo((prev) => ({
         ...prev,
@@ -124,7 +132,7 @@ const Board = () => {
         status: "PLAY",
       }));
 
-      console.log("result => " + JSON.stringify(gameInfo));
+      // console.log("result => " + JSON.stringify(gameInfo));
     }
   }, [gameInfo]);
 
@@ -146,14 +154,14 @@ const Board = () => {
 
   const updateGameInfo = () => {
     setGameInfo((prevGameInfo) => {
-      if (!prevGameInfo) return prevGameInfo; 
+      if (!prevGameInfo) return prevGameInfo;
       const updatedGameInfo = apply(prevGameInfo);
       const newGameInfo = addRandomTile(updatedGameInfo);
-      console.log(JSON.stringify(newGameInfo));  
+      console.log(JSON.stringify(newGameInfo));
       return { ...newGameInfo, isChanged: false };
     });
   };
-  
+
   return (
     <div className="board">
       <div className="grid">{renderGrid()}</div>
